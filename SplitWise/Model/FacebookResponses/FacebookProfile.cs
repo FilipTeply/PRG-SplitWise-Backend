@@ -9,7 +9,7 @@ namespace SplitWise.Model.FacebookResponses
     public class FacebookProfile
     {
         [JsonProperty("userid")]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
 
         [JsonProperty("username")]
         public string Username { get; set; }

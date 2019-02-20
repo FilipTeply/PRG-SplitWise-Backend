@@ -41,7 +41,7 @@ namespace SplitWise.Services
             return foundUser;
         }
 
-        public virtual async Task<bool> LoginRequestIsValid(int userId, string facebookToken)
+        public virtual async Task<bool> LoginRequestIsValid(long userId, string facebookToken)
         {
             return userId.Equals((await GetFacebookProfileAsync(facebookToken)).UserId);
         }
@@ -80,7 +80,7 @@ namespace SplitWise.Services
             client.DefaultRequestHeaders.Add("User-Agent", "SplitWiseApp");
         }
 
-        public virtual async Task<bool> UpdateUser(int userId, string facebookToken)
+        public virtual async Task<bool> UpdateUser(long userId, string facebookToken)
         {
             if (UserExists(userId))
             {
@@ -102,12 +102,12 @@ namespace SplitWise.Services
             _context.SaveChanges();
         }
 
-        public virtual bool UserExists(int userId)
+        public virtual bool UserExists(long userId)
         {
             return _context.Users.Where(e => e.UserId == userId).Count() > 0;
         }
 
-        public virtual void UpdateToken(int userId)
+        public virtual void UpdateToken(long userId)
         {
             _context.Find<User>(userId).EsToken = CreateSplitWiseToken();
             _context.SaveChanges();
@@ -125,7 +125,7 @@ namespace SplitWise.Services
             return true;
         }
 
-        public virtual string GetTokenOf(int userId)
+        public virtual string GetTokenOf(long userId)
         {
             return _context.Find<User>(userId).EsToken;
         }

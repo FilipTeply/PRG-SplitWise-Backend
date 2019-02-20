@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SplitWise.Migrations
 {
-    public partial class InitialMigrationFilip3 : Migration
+    public partial class InitialMigrationFilip4 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,7 +24,7 @@ namespace SplitWise.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     EsToken = table.Column<string>(nullable: true),
                     Username = table.Column<string>(nullable: false),
@@ -39,15 +39,15 @@ namespace SplitWise.Migrations
                 name: "UserGroups",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false),
+                    UserId = table.Column<long>(nullable: false),
                     GroupId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserGroups", x => new { x.UserId, x.GroupId });
                     table.ForeignKey(
-                        name: "FK_UserGroups_Groups_UserId",
-                        column: x => x.UserId,
+                        name: "FK_UserGroups_Groups_GroupId",
+                        column: x => x.GroupId,
                         principalTable: "Groups",
                         principalColumn: "GroupId",
                         onDelete: ReferentialAction.Cascade);
@@ -58,6 +58,11 @@ namespace SplitWise.Migrations
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserGroups_GroupId",
+                table: "UserGroups",
+                column: "GroupId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

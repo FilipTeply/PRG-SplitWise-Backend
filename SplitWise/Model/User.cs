@@ -14,14 +14,14 @@ namespace SplitWise.Model
         [Key]
         [Required]
         [JsonProperty("userid")]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
 
         [JsonProperty("estoken")]
         public string EsToken { get; set; }
 
         [Required]
         [MinLength(1)]
-        [JsonProperty("login")]
+        [JsonProperty("username")]
         public string Username { get; set; }
 
         [JsonProperty("photo")]
@@ -45,7 +45,7 @@ namespace SplitWise.Model
         //    }
         //}
 
-        public User(int userId)
+        public User(long userId)
         {
             UserId = userId;
         }

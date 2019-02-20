@@ -10,7 +10,7 @@ namespace SplitWise.Model
     public class UserGroup
     {
         [Required]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [JsonIgnore]
         public User User { get; set; }
 
@@ -18,7 +18,7 @@ namespace SplitWise.Model
         public int GroupId { get; set; }
         public Group Group { get; set; }
 
-        public UserGroup(int userId, int groupId)
+        public UserGroup(long userId, int groupId)
         {
             UserId = userId;
             GroupId = groupId;

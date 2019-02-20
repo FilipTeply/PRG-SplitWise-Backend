@@ -34,7 +34,7 @@ namespace SplitWise.Migrations
 
             modelBuilder.Entity("SplitWise.Model.User", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<long>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -52,11 +52,13 @@ namespace SplitWise.Migrations
 
             modelBuilder.Entity("SplitWise.Model.UserGroup", b =>
                 {
-                    b.Property<int>("UserId");
+                    b.Property<long>("UserId");
 
                     b.Property<int>("GroupId");
 
                     b.HasKey("UserId", "GroupId");
+
+                    b.HasIndex("GroupId");
 
                     b.ToTable("UserGroups");
                 });
@@ -65,7 +67,7 @@ namespace SplitWise.Migrations
                 {
                     b.HasOne("SplitWise.Model.Group", "Group")
                         .WithMany("UserGroups")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("SplitWise.Model.User", "User")

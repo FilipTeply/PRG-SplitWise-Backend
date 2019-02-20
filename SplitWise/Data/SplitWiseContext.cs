@@ -21,10 +21,8 @@ namespace SplitWise.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-
             modelBuilder.Entity<UserGroup>()
-                 .HasKey(t => new { t.UserId, t.GroupId });
+                .HasKey(t => new { t.UserId, t.GroupId });
 
             modelBuilder.Entity<UserGroup>()
                 .HasOne(ug => ug.User)
@@ -34,7 +32,7 @@ namespace SplitWise.Data
             modelBuilder.Entity<UserGroup>()
                 .HasOne(ug => ug.Group)
                 .WithMany(g => g.UserGroups)
-                .HasForeignKey(ug => ug.UserId);
+                .HasForeignKey(ug => ug.GroupId);
         }
     }
 }

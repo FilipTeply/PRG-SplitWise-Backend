@@ -10,11 +10,11 @@ using SplitWise.Services;
 
 namespace SplitWise.Controllers
 {
- 
-    public class SessionController : BaseController
+     public class SessionController : BaseController
     {
         private readonly SplitWiseContext _context;
         private readonly UserServices _userServices;
+
         public SessionController(SplitWiseContext context, UserServices userServices)
         {
             _context = context;

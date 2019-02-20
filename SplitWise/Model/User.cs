@@ -23,20 +23,16 @@ namespace SplitWise.Model
         [MinLength(1)]
         [JsonProperty("login")]
         public string Username { get; set; }
-      
+
+        [JsonProperty("photo")]
+        public string PhotoUrl { get; set; }
+
         [JsonIgnore]
         [NotMapped]
         public List<string> groupNames { get; set; }
 
         [JsonIgnore]
         public List<UserGroup> UserGroups { get; set; }
-
-        //public string Repos { get; set; }
-
-
-
-
-
 
         //[NotMapped]
         //public List<string> UserLanguageNamesList
@@ -52,17 +48,17 @@ namespace SplitWise.Model
         public User(int userId)
         {
             UserId = userId;
-
         }
 
         public User()
         {
         }
+
         public User(FacebookProfile newUser)
         {
             UserId = newUser.UserId;
-           
         }
+
         //public void setUserRepos(List<UserRepos> repos)
         //{
         //    string urls = null;
@@ -73,8 +69,4 @@ namespace SplitWise.Model
         //    Repos = urls;
         //}
     }
-
-
-
-
 }

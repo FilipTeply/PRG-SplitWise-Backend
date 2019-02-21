@@ -33,14 +33,17 @@ namespace SplitWise.Controllers
                 Response.StatusCode = 400;
                 responseBody =
                     !(userId > 0) ?
-                    new ErrorResponseBody("user id is missing!") :
-                    new ErrorResponseBody("es_token is missing!");
+                    new ErrorResponseBody("User id is missing!") :
+                    new ErrorResponseBody("Facebook token is missing!");
             }
             else if (await _userServices.LoginRequestIsValid(userId, fbToken))
             {
                 await _userServices.UpdateUser(userId, fbToken);
-                responseBody = new TokenResponseBody(_userServices.GetTokenOf(userId));
-               
+                //responseBody = new LoginResponseBody(fbToken);
+                responseBody = new LoginResponseBody(_userServices.GetTokenOf(userId));                
+
+                _userServices.GetTokenOf(userId);  
+                //GetCurrentUser()
             }
             else
             {
@@ -50,7 +53,7 @@ namespace SplitWise.Controllers
         }
 
         [HttpDelete("/logout")]
-        public async Task<GeneralAPIResponseBody> Logout()
+        public GeneralAPIResponseBody Logout()
         {
             _userServices.RemoveToken(GetCurrentUser());
 

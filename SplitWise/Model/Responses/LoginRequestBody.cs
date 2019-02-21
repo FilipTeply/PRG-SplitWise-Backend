@@ -13,5 +13,7 @@ namespace SplitWise.Model.Responses
 
         [JsonProperty("fbtoken")]
         public string FbToken { get; set; }
+
+
     }
 }

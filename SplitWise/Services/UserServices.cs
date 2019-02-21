@@ -1,6 +1,7 @@
 ﻿using SplitWise.Data;
 using SplitWise.Model;
-using SplitWise.Model.FacebookResponses;
+//using SplitWise.Model.FacebookResponses;
+using SplitWise.Model.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,8 @@ namespace SplitWise.Services
     {
         private readonly SplitWiseContext _context;
         private const string ApiUrl = "https://graph.facebook.com/v3.2/";
-        private HttpClient client = new HttpClient();
+        private HttpClient client;
+        //= new HttpClient();
 
 
         public UserServices()
@@ -46,18 +48,22 @@ namespace SplitWise.Services
             return userId.Equals((await GetFacebookProfileAsync(facebookToken)).UserId);
         }
 
-        public async Task<FacebookProfile> GetFacebookProfileAsync(string facebookToken)
+        public async Task<LoginResponseBody> GetFacebookProfileAsync(string facebookToken)
         {
             client = new HttpClient();
             HeadersSettingForSplitWiseApi();
             client.DefaultRequestHeaders.Add("Authorization", "token " + facebookToken);
-            HttpResponseMessage facebookProfileResponse = await client.GetAsync(ApiUrl + "user");
+            HttpResponseMessage facebookProfileResponse = await client.GetAsync(ApiUrl
+                 + "/me?access_token="
+                 + facebookToken + "&fields=name,picture");
 
-            var profileLoggingIn = new FacebookProfile();
+            //https://graph.facebook.com/v3.2/TADYJEUSERID?access_token=TADYJETOKEN&fields=name,picture
+                     
+            var profileLoggingIn = new LoginResponseBody();
 
             if (facebookProfileResponse.IsSuccessStatusCode)
             {
-                profileLoggingIn = await facebookProfileResponse.Content.ReadAsAsync<FacebookProfile>();
+                profileLoggingIn = await facebookProfileResponse.Content.ReadAsAsync<LoginResponseBody>();
             }
             return profileLoggingIn;
         }
@@ -77,7 +83,9 @@ namespace SplitWise.Services
 
         public void HeadersSettingForSplitWiseApi()
         {
-            client.DefaultRequestHeaders.Add("User-Agent", "SplitWiseApp");
+            //client.DefaultRequestHeaders.Add("User-Agent", "SplitWiseApp");
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+           
         }
 
         public virtual async Task<bool> UpdateUser(long userId, string facebookToken)
@@ -112,13 +120,13 @@ namespace SplitWise.Services
             _context.Find<User>(userId).EsToken = CreateSplitWiseToken();
             _context.SaveChanges();
         }
-        
+
         public async Task<bool> CreateUser(string facebookToken)
         {
-            FacebookProfile newProfile = await GetFacebookProfileAsync(facebookToken);
+            LoginResponseBody newProfile = await GetFacebookProfileAsync(facebookToken);
             User newUser = new User(newProfile);
             newUser.EsToken = CreateSplitWiseToken();
-           // newUser.setUserRepos(await GetGithubProfilesReposAsync(newUser.Username));
+            // newUser.setUserRepos(await GetGithubProfilesReposAsync(newUser.Username));
 
             _context.Users.Add(newUser);
             _context.SaveChanges();
@@ -129,7 +137,5 @@ namespace SplitWise.Services
         {
             return _context.Find<User>(userId).EsToken;
         }
-
-
     }
 }

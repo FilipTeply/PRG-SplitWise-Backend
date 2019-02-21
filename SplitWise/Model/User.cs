@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
-using SplitWise.Model.FacebookResponses;
+//using SplitWise.Model.FacebookResponses;
+using SplitWise.Model.Responses;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -26,6 +27,10 @@ namespace SplitWise.Model
 
         [JsonProperty("photo")]
         public string PhotoUrl { get; set; }
+
+        [Required]
+        [JsonProperty("balance")]
+        public double Balance { get; set; }
 
         [JsonIgnore]
         [NotMapped]
@@ -54,9 +59,11 @@ namespace SplitWise.Model
         {
         }
 
-        public User(FacebookProfile newUser)
+        public User(LoginResponseBody loginResponseBody)
         {
-            UserId = newUser.UserId;
+            UserId = loginResponseBody.UserId;
+            Username = loginResponseBody.Username;
+            PhotoUrl = loginResponseBody.PhotoUrl;
         }
 
         //public void setUserRepos(List<UserRepos> repos)

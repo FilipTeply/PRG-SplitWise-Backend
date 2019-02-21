@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-//using SplitWise.Model.FacebookResponses;
+using SplitWise.Model.FacebookResponses;
 using SplitWise.Model.Responses;
 using System;
 using System.Collections.Generic;
@@ -59,11 +59,11 @@ namespace SplitWise.Model
         {
         }
 
-        public User(LoginResponseBody loginResponseBody)
+        public User(FacebookProfile facebookProfile)
         {
-            UserId = loginResponseBody.UserId;
-            Username = loginResponseBody.Username;
-            PhotoUrl = loginResponseBody.PhotoUrl;
+            UserId = facebookProfile.UserId;
+            Username = facebookProfile.Username;
+            PhotoUrl = facebookProfile.PhotoUrl;
         }
 
         //public void setUserRepos(List<UserRepos> repos)

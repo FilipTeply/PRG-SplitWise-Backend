@@ -1,6 +1,6 @@
 ﻿using SplitWise.Data;
 using SplitWise.Model;
-//using SplitWise.Model.FacebookResponses;
+using SplitWise.Model.FacebookResponses;
 using SplitWise.Model.Responses;
 using System;
 using System.Collections.Generic;
@@ -48,7 +48,7 @@ namespace SplitWise.Services
             return userId.Equals((await GetFacebookProfileAsync(facebookToken)).UserId);
         }
 
-        public async Task<LoginResponseBody> GetFacebookProfileAsync(string facebookToken)
+        public async Task<FacebookProfile> GetFacebookProfileAsync(string facebookToken)
         {
             client = new HttpClient();
             HeadersSettingForSplitWiseApi();
@@ -58,12 +58,12 @@ namespace SplitWise.Services
                  + facebookToken + "&fields=name,picture");
 
             //https://graph.facebook.com/v3.2/TADYJEUSERID?access_token=TADYJETOKEN&fields=name,picture
-                     
-            var profileLoggingIn = new LoginResponseBody();
+
+            var profileLoggingIn = new FacebookProfile();
 
             if (facebookProfileResponse.IsSuccessStatusCode)
             {
-                profileLoggingIn = await facebookProfileResponse.Content.ReadAsAsync<LoginResponseBody>();
+                profileLoggingIn = await facebookProfileResponse.Content.ReadAsAsync<FacebookProfile>();
             }
             return profileLoggingIn;
         }
@@ -85,7 +85,7 @@ namespace SplitWise.Services
         {
             //client.DefaultRequestHeaders.Add("User-Agent", "SplitWiseApp");
             client.DefaultRequestHeaders.Add("Accept", "application/json");
-           
+
         }
 
         public virtual async Task<bool> UpdateUser(long userId, string facebookToken)
@@ -123,10 +123,9 @@ namespace SplitWise.Services
 
         public async Task<bool> CreateUser(string facebookToken)
         {
-            LoginResponseBody newProfile = await GetFacebookProfileAsync(facebookToken);
+            FacebookProfile newProfile = await GetFacebookProfileAsync(facebookToken);
             User newUser = new User(newProfile);
             newUser.EsToken = CreateSplitWiseToken();
-            // newUser.setUserRepos(await GetGithubProfilesReposAsync(newUser.Username));
 
             _context.Users.Add(newUser);
             _context.SaveChanges();

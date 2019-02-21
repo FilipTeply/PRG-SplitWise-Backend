@@ -23,9 +23,9 @@ namespace SplitWise.Model.Responses
         [JsonProperty("picture")]
         public string PhotoUrl { get; set; }
 
-        public LoginResponseBody()
-        {
-        }
+        //public LoginResponseBody()
+        //{
+        //}
 
         //public LoginResponseBody(User user)
         //{
@@ -46,5 +46,11 @@ namespace SplitWise.Model.Responses
         //    Status = "ok";
         //    FbToken = fbToken;
         //}
+        
+        public LoginResponseBody(string esToken)
+        {
+            Status = "ok";
+            EsToken = esToken;
+        }
     }
 }

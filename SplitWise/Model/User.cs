@@ -27,6 +27,10 @@ namespace SplitWise.Model
         [JsonProperty("photo")]
         public string PhotoUrl { get; set; }
 
+        [Required]
+        [JsonProperty("balance")]
+        public double Balance { get; set; }
+
         [JsonIgnore]
         [NotMapped]
         public List<string> groupNames { get; set; }

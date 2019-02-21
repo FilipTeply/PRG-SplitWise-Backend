@@ -20,7 +20,7 @@ namespace SplitWise.Services
         }
         public async Task InvokeAsync(HttpContext context, UserServices userServices)
         {
-            if (!context.Request.Path.Value.Contains("/login"))
+            if (!context.Request.Path.Value.Equals("/login"))
             {
                 string estoken = context.Request.Headers["estoken"];
 

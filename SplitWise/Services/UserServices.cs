@@ -41,17 +41,24 @@ namespace SplitWise.Services
             return foundUser;
         }
 
-        public virtual async Task<bool> LoginRequestIsValid(long userId, string facebookToken)
+        public User FindUserByUserId(long userid)
         {
-            return userId.Equals((await GetFacebookProfileAsync(facebookToken)).UserId);
+            return _context.Users.Find(userid);
         }
 
-        public async Task<FacebookProfile> GetFacebookProfileAsync(string facebookToken)
+
+
+        public virtual async Task<bool> LoginRequestIsValid(long userId)
+        {
+            return userId.Equals((await GetFacebookProfileAsync(userId)).UserId);
+        }
+
+        public async Task<FacebookProfile> GetFacebookProfileAsync(long userId)
         {
             client = new HttpClient();
             HeadersSettingForSplitWiseApi();
-            client.DefaultRequestHeaders.Add("Authorization", "token " + facebookToken);
-            HttpResponseMessage facebookProfileResponse = await client.GetAsync(ApiUrl + "user");
+            //client.DefaultRequestHeaders.Add("Authorization", "token " + userId);
+            HttpResponseMessage facebookProfileResponse = await client.GetAsync(ApiUrl + userId.ToString());
 
             var profileLoggingIn = new FacebookProfile();
 
@@ -77,10 +84,10 @@ namespace SplitWise.Services
 
         public void HeadersSettingForSplitWiseApi()
         {
-            client.DefaultRequestHeaders.Add("User-Agent", "SplitWiseApp");
+            client.DefaultRequestHeaders.Add("estoken", "estoken");
         }
 
-        public virtual async Task<bool> UpdateUser(long userId, string facebookToken)
+        public virtual async Task<bool> UpdateUser(long userId)
         {
             if (UserExists(userId))
             {
@@ -88,7 +95,7 @@ namespace SplitWise.Services
             }
             else
             {
-                await CreateUser(facebookToken);
+                await CreateUser(userId);
                 //await UpdateLanguagesTableAndUserLanguageTable(username);
             }
 
@@ -113,9 +120,9 @@ namespace SplitWise.Services
             _context.SaveChanges();
         }
         
-        public async Task<bool> CreateUser(string facebookToken)
+        public async Task<bool> CreateUser(long userId)
         {
-            FacebookProfile newProfile = await GetFacebookProfileAsync(facebookToken);
+            FacebookProfile newProfile = await GetFacebookProfileAsync(userId);
             User newUser = new User(newProfile);
             newUser.EsToken = CreateSplitWiseToken();
            // newUser.setUserRepos(await GetGithubProfilesReposAsync(newUser.Username));
